@@ -102,11 +102,20 @@ namespace BMICalc
                 customer.statusTitle = "Obese";
             }
 
-            TextWriter writer = new StreamWriter(FilePath + FileName);
-            XmlSerializer serializer = new XmlSerializer(typeof(Customer));
+            try
+            {
+                TextWriter writer = new StreamWriter(FilePath + FileName, true);
+                XmlSerializer serializer = new XmlSerializer(typeof(Customer));
 
-            serializer.Serialize(writer, customer);
-            writer.Close();
+                serializer.Serialize(writer, customer);
+                writer.Close();
+            }
+            catch (FileNotFoundException)
+            {
+                FileStream fileStream = new FileStream(FilePath + FileName, FileMode.Create);
+                fileStream.Close();
+            }
+
 
             OnLoadStats();
         }
