@@ -32,7 +32,7 @@
         <Label Grid.Row="2" Grid.Column="1"  Content="Last Name: " FontSize="20"/>
         <Label Grid.Row="3" Grid.Column="1"  Content="Phone Num: " FontSize="20"/>
         <Label Grid.Row="4" Grid.Column="1"  Content="Height (in.): " FontSize="20"/>
-        <Label Grid.Row="5" Grid.Column="1"  Content="Wight (lbs.): " FontSize="20"/>
+        <Label Grid.Row="5" Grid.Column="1"  Content="Weight (lbs.): " FontSize="20"/>
 
         <TextBox Grid.Row="1" Grid.Column="2" x:Name="xFirstNameBox"/>
         <TextBox Grid.Row="2" Grid.Column="2" x:Name="xLastNameBox"/>
@@ -40,14 +40,16 @@
         <TextBox Grid.Row="4" Grid.Column="2" x:Name="xHeightInchesBox"/>
         <TextBox Grid.Row="5" Grid.Column="2" x:Name="xWeightLbsBox"/>
 
+        <TextBlock Text="Your BMI is:" Grid.Row="1" Grid.Column="4" FontWeight="Bold" FontSize="18" VerticalAlignment="Center" Width="414"/>
+
         <TextBlock x:Name="xYourBMIResults" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Left" 
                    TextWrapping="Wrap" Text="BMI Results" Grid.RowSpan="2" Grid.ColumnSpan="3" 
                    FontWeight="Bold" FontSize="60" Width="414"/>
         <TextBlock x:Name="xBMIMessage" Grid.Row="4"  Grid.RowSpan="2" Grid.Column="4" Grid.ColumnSpan="3" 
-                   HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="Message" 
-                   FontWeight="Bold" FontSize="16" Width="412" Height="102"/>
+                   HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="Message: " 
+                   FontWeight="Bold" FontSize="16" Width="367" Height="102"/>
 
-        <Button Grid.Row="6" Grid.Column="1" x:Name="SubmitBtn" Content="Submit"/>
+        <Button Grid.Row="6" Grid.Column="1" x:Name="SubmitBtn" Content="Submit" Click="SubmitBtn_Click"/>
         <Button Grid.Row="6" Grid.Column="2" x:Name="ClearBtn" Content="Clear" Click="ClearBtn_Click"/>
         <Button Grid.Row="6" Grid.Column="4" x:Name="ImportBtn" Content="Import"/>
         <Button Grid.Row="6" Grid.Column="6" x:Name="ExitBtn" Content="Exit" Click="ExitBtn_Click"/>
