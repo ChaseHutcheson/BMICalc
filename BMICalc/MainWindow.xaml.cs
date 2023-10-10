@@ -4,6 +4,10 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Xml;
 using System.Data;
+using System.Windows.Documents;
+using BMICalc.Classes;
+using System.Collections.Generic;
+using static BMICalc.MainWindow;
 
 namespace BMICalc
 {
@@ -16,6 +20,10 @@ namespace BMICalc
     {
         public string FilePath = "../../../BMICalc/";
         public string FileName = "yourBMI.xml";
+
+        XmlSerializer xmlSerializer;
+        List<UserBMI> userBmiList;
+
         public class Customer
         {
             [XmlAttribute("Last Name")]
@@ -37,6 +45,8 @@ namespace BMICalc
         public MainWindow()
         {
             InitializeComponent();
+            xmlSerializer = new XmlSerializer(typeof(List<UserBMI>));
+            userBmiList = new List<UserBMI>();
             OnLoadStats();
         }
 
@@ -104,11 +114,20 @@ namespace BMICalc
 
             try
             {
-                TextWriter writer = new StreamWriter(FilePath + FileName, true);
-                XmlSerializer serializer = new XmlSerializer(typeof(Customer));
+                FileStream fileStream = new FileStream(FilePath + FileName, FileMode.Create, FileAccess.Write);
+                UserBMI userBMI = new UserBMI();
+                userBMI.FirstName = customer.firstName;
+                userBMI.LastName = customer.lastName;
+                userBMI.PhoneNumber = customer.phoneNumber;
+                userBMI.HeightInInches = customer.heightInches;
+                userBMI.BmiResults = customer.custBMI;
+                userBMI.Status = customer.statusTitle;
 
-                serializer.Serialize(writer, customer);
-                writer.Close();
+                userBmiList.Add(userBMI);
+
+                xmlSerializer.Serialize(fileStream, userBmiList);
+                fileStream.Close();
+
             }
             catch (FileNotFoundException)
             {
@@ -122,20 +141,19 @@ namespace BMICalc
 
         private void OnLoadStats()
         {
-            Customer customer = new Customer();
-            XmlSerializer deserializer = new XmlSerializer(typeof(Customer));
-            using (XmlReader reader = XmlReader.Create(FilePath + FileName))
+            try
             {
-                customer = (Customer)deserializer.Deserialize(reader);
+                FileStream fileStream = new FileStream(FilePath + FileName, FileMode.Open, FileAccess.Read);
+                userBmiList = (List<UserBMI>)xmlSerializer.Deserialize(fileStream);
 
-                xLastNameBox.Text = customer.lastName;
-                xFirstNameBox.Text = customer.firstName;
-                xPhoneBox.Text = customer.phoneNumber;
+                xDataGrid.ItemsSource = userBmiList;
+                fileStream.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
             }
 
-            DataSet xmlData = new DataSet();
-            xmlData.ReadXml(FilePath + FileName, XmlReadMode.Auto);
-            xDataGrid.ItemsSource = xmlData.Tables[0].DefaultView;
         }
     }
 }
